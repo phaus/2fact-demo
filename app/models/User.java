@@ -2,9 +2,11 @@ package models;
 
 import play.Logger;
 import play.db.ebean.Model;
+import play.libs.Json;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,11 @@ public class User extends Model {
     @Lob
     public String googleScratchCodes;
 
+    public String yubiKeyNonce;
+    public String yubiKeyIdentity;
+
+    @Transient
+    public String yubiKey;
 
     public final static Finder<Long, User> FINDER = new Finder<Long, User>(Long.class, User.class);
 
@@ -62,5 +69,9 @@ public class User extends Model {
             user.save();
         }
         return user;
+    }
+
+    public String toString(){
+        return Json.toJson(this).toString();
     }
 }

@@ -16,14 +16,7 @@ public class Global extends GlobalSettings {
         Logger.info("@" + System.currentTimeMillis() + " Application has started");
         ServiceLoader<ICredentialRepository> impl = ServiceLoader.load(ICredentialRepository.class, app.classloader());
         for (ICredentialRepository loadedImpl : impl) {
-            System.out.println("Using " + loadedImpl.getClass());
-        }
-        ClassLoader cl = app.classloader();
-
-        URL[] urls = ((URLClassLoader) cl).getURLs();
-
-        for (URL url : urls) {
-            System.out.println(url.getFile());
+            Logger.info("Using " + loadedImpl.getClass());
         }
     }
 }

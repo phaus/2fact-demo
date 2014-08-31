@@ -18,7 +18,6 @@ public class GoogleAuth extends Controller {
     public static Result init() {
         String username = request().getQueryString("username");
         if (username == null && username.length() == 0) {
-
             return ok(views.html.error.render("you need to set a username!"));
         } else {
             User user = User.getOrCreate(username);
@@ -29,6 +28,7 @@ public class GoogleAuth extends Controller {
             String qrCode = GoogleAuthenticatorKey.getQRBarcodeURL(username, request().host(), key.getKey());
             qrCode = qrCode.replace("https://www.google.com/chart?", "https://chart.googleapis.com/chart?");
             Logger.info("qrCode: " + qrCode);
+            Logger.info("setup done for " + user);
             return ok(views.html.GoogleAuth.init.render(qrCode));
         }
     }
@@ -39,7 +39,7 @@ public class GoogleAuth extends Controller {
             return redirect(controllers.routes.Application.index());
         }
         User fUser = userForm.get();
-        User user = User.getOrCreate(fUser.username);
+        final User user = User.getOrCreate(fUser.username);
         if (user == null) {
             return notFound();
         } else {
@@ -49,9 +49,9 @@ public class GoogleAuth extends Controller {
             GoogleAuthenticator gAuth = new GoogleAuthenticator();
             boolean isCodeValid = gAuth.authorize(secret, code);
             if(isCodeValid) {
-                return ok(views.html.message.render());
+                return ok(views.html.message.render(user.toString()));
             } else {
-                return forbidden("Code not valid!");
+                return ok(views.html.error.render("Code not valid!"));
             }
         }
     }

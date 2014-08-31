@@ -7,7 +7,9 @@ create table user (
   username                  varchar(255),
   google_secret_key         varchar(255),
   google_validation_code    integer,
-  google_scratch_codes      clob)
+  google_scratch_codes      clob,
+  yubi_key_nonce            varchar(255),
+  yubi_key_identity         varchar(255))
 ;
 
 
