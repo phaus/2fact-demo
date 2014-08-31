@@ -1,0 +1,33 @@
+@import helper._
+
+@(message: String, userForm: Form[User])
+
+@main("Welcome to Auth Demo") {
+<fieldset>
+    <legend>Google Authenticator</legend>
+    <form method="GET" action="@routes.GoogleAuth.init()">
+        <input type="text" name="username"/>
+        <input type="submit" value="init">
+    </form>
+    <h2>Login</h2>
+    @form(routes.GoogleAuth.auth()) {
+        @inputText(
+            userForm("username"),
+            '_label -> "username",
+            'class -> "form-control",
+            'placeholder -> "username"
+        )
+        @inputText(
+            userForm("googleValidationCode"),
+            '_label -> "code",
+            'class -> "form-control",
+            'placeholder -> "code"
+        )
+        <input type="submit" value="Login">
+    }
+</fieldset>
+
+
+<form method="GET" action="@routes.GoogleAuth.init()">
+</form>
+}
