@@ -1,7 +1,17 @@
-@(qrCode: String)
+@(qrCode: String, user: User)
 
 @main("Welcome to Google Authenticator") {
-
+<ol class="breadcrumb">
+    <li><a href="@routes.Application.index()">Main</a></li>
+    <li>Hello @user.username</li>
+    @if(user.yubiKeyIdentity != null){
+    <li>YK <span class="glyphicon glyphicon-ok"></span></li>
+    }
+    @if(user.googleSecretKey != null){
+    <li>GA <span class="glyphicon glyphicon-ok"></span></li>
+    }
+    <li><a href="@routes.Application.logout()">logout</a></li>
+</ol>
 <h1>Google Authenticator</h1>
 <img src="@qrCode"/>
 <p>
@@ -9,4 +19,5 @@
     <a target="_new"
        href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a>
 </p>
+<a href="@routes.Application.index()" class="btn btn-lg btn-primary">Next</a>
 }

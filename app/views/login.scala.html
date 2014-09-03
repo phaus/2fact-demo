@@ -1,0 +1,117 @@
+@import helper._
+
+@(message: String, userForm: Form[User])
+
+@main("Welcome to Auth Demo") {
+
+<ol class="breadcrumb">
+    <li><a href="@routes.Application.index()">Main</a></li>
+    <li class="active">Login</li>
+</ol>
+<div class="container">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#legacy" role="tab" data-toggle="tab">Legacy</a></li>
+        <li><a href="#google" role="tab" data-toggle="tab">Google Authenticator</a></li>
+        <li><a href="#yubi" role="tab" data-toggle="tab">YubiKey</a></li>
+        <li><a href="#register" role="tab" data-toggle="tab">Register</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="legacy">
+            <fieldset>
+                <legend>Legacy Login</legend>
+                @form(routes.Application.auth()) {
+                @inputText(
+                userForm("username"),
+                '_label -> "username",
+                'class -> "form-control",
+                'placeholder -> "username"
+                )
+                @inputPassword(
+                userForm("password"),
+                '_label -> "password",
+                'class -> "form-control",
+                'placeholder -> "password"
+                )
+                <input class="btn btn-primary" type="submit" value="Login" />
+                }
+            </fieldset>
+        </div>
+        <div class="tab-pane" id="google">
+            <fieldset>
+                <legend>Google Authenticator</legend>
+                @form(routes.GoogleAuth.auth()) {
+                @inputText(
+                userForm("username"),
+                '_label -> "username",
+                'class -> "form-control",
+                'placeholder -> "username"
+                )
+                @inputPassword(
+                userForm("password"),
+                '_label -> "password",
+                'class -> "form-control",
+                'placeholder -> "password"
+                )
+                @inputText(
+                userForm("googleValidationCode"),
+                '_label -> "code",
+                'class -> "form-control",
+                'placeholder -> "code"
+                )
+                <input class="btn btn-primary" type="submit" value="Login" />
+                }
+            </fieldset>
+
+        </div>
+        <div class="tab-pane" id="yubi">
+            <fieldset>
+                <legend>YubiKey Authenticator</legend>
+                @form(routes.YubiAuth.auth()) {
+                @inputText(
+                userForm("username"),
+                '_label -> "username",
+                'class -> "form-control",
+                'placeholder -> "username"
+                )
+                @inputPassword(
+                userForm("password"),
+                '_label -> "password",
+                'class -> "form-control",
+                'placeholder -> "password"
+                )
+                @inputText(
+                userForm("yubiKey"),
+                '_label -> "yubikey",
+                'class -> "form-control",
+                'placeholder -> "yubikey"
+                )
+                <input class="btn btn-primary" type="submit" value="Login">
+                }
+            </fieldset>
+        </div>
+        <div class="tab-pane" id="register">
+            <fieldset>
+                <legend>Register</legend>
+                @form(routes.Users.save()) {
+                @inputText(
+                userForm("username"),
+                '_label -> "username",
+                'class -> "form-control",
+                'placeholder -> "username"
+                )
+                @inputPassword(
+                userForm("password"),
+                '_label -> "password",
+                'class -> "form-control",
+                'placeholder -> "password"
+                )
+                <input class="btn btn-primary" type="submit" value="Create" />
+                }
+            </fieldset>
+        </div>
+    </div>
+    }
+</div>

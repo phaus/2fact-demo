@@ -24,25 +24,6 @@ public class YubiAuth extends Controller {
     // timeout = Number of seconds to wait for sync responses
     private final static String YUBI_API_URL_TEMPLATE = "http://api.yubico.com/wsapi/2.0/verify?otp=%s&nonce=%s&id=%s&timeout=8&sl=50";
 
-    public static Result init() {
-        String username = request().getQueryString("username");
-        String yubiKey = request().getQueryString("yubikey");
-        if (yubiKey == null || username == null || username.length() == 0 || yubiKey.length() == 0) {
-            return ok(views.html.error.render("you need to set a username and a yubiKey!"));
-        } else {
-            User user = User.getOrCreate(username);
-            if (user == null) {
-                return notFound();
-            } else {
-                user.yubiKeyIdentity = getYKidentifyer(yubiKey);
-                user.yubiKeyNonce = UUID.create().toLowerCase().replace("-", "").substring(0, 20);
-                user.save();
-                Logger.info("setup done for " + user);
-                return redirect(controllers.routes.Application.index());
-            }
-        }
-    }
-
     public static Promise<Result> auth() {
         Form<User> userForm = USER_FORM.bindFromRequest();
         if (userForm.hasErrors()) {
@@ -51,7 +32,9 @@ public class YubiAuth extends Controller {
         User fUser = userForm.get();
         final User user = User.getOrCreate(fUser.username);
         if (user == null) {
-            return Promise.pure(notFound());
+            return Promise.pure((Result) notFound());
+        } else if (!user.verify(fUser.password)) {
+            return Promise.pure((Result) forbidden("password is wrong!"));
         } else {
             final String callUrl = String.format(YUBI_API_URL_TEMPLATE, fUser.yubiKey, user.yubiKeyNonce, REQUESTOR_ID);
             Logger.info("calling: " + callUrl);
@@ -67,14 +50,38 @@ public class YubiAuth extends Controller {
                     for (String part : parts) {
                         line = part.trim().toLowerCase();
                         if (line.startsWith("status")) {
-                            if (line.substring(line.indexOf("=")+1).trim().equals("ok")) {
-                                return ok(views.html.message.render(user.toString()));
+                            if (line.substring(line.indexOf("=") + 1).trim().equals("ok")) {
+                                user.updateSession();
+                                session().put("sessionId", user.sessionId);
+                                Logger.info("create session with: " + user.sessionId);
+                                user.save();
+                                return ok(views.html.message.render(user.toString(), user));
                             }
                         }
                     }
                     return ok(views.html.error.render("Code not valid!"));
                 }
             });
+        }
+    }
+
+    public static Result init() {
+        String sessionId = session().get("sessionId");
+        User user = User.FINDER.where().eq("sessionId", sessionId).findUnique();
+        Form<User> userForm = USER_FORM.bindFromRequest();
+        String yubiKey = userForm.get() != null ? userForm.get().yubiKey : null;
+        if (yubiKey == null || sessionId == null || user == null || yubiKey.length() == 0) {
+            return ok(views.html.error.render("you need to be logged in and set a yubiKey!"));
+        } else {
+            if (user == null) {
+                return notFound();
+            } else {
+                user.yubiKeyIdentity = getYKidentifyer(yubiKey);
+                user.yubiKeyNonce = UUID.create().toLowerCase().replace("-", "").substring(0, 20);
+                user.save();
+                Logger.info("setup done for " + user);
+                return redirect(controllers.routes.Application.index());
+            }
         }
     }
 

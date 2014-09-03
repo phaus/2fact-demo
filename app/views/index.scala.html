@@ -1,57 +1,37 @@
 @import helper._
 
-@(message: String, userForm: Form[User])
+@(message: String, user: User, userForm: Form[User])
 
 @main("Welcome to Auth Demo") {
-<fieldset>
-    <legend>Google Authenticator</legend>
-    <h2>Init</h2>
-
-    <form method="GET" action="@routes.GoogleAuth.init()">
-        <input placeholder="username" type="text" name="username"/>
-        <input type="submit" value="init">
-    </form>
-    <h2>Login</h2>
-    @form(routes.GoogleAuth.auth()) {
-    @inputText(
-    userForm("username"),
-    '_label -> "username",
-    'class -> "form-control",
-    'placeholder -> "username"
-    )
-    @inputText(
-    userForm("googleValidationCode"),
-    '_label -> "code",
-    'class -> "form-control",
-    'placeholder -> "code"
-    )
-    <input type="submit" value="Login">
+<ol class="breadcrumb">
+    <li><a href="@routes.Application.index()">Main</a></li>
+    <li>Hello @user.username</li>
+    @if(user.yubiKeyIdentity != null){
+    <li>YK <span class="glyphicon glyphicon-ok"></span></li>
     }
-</fieldset>
-
-<fieldset>
-    <legend>YubiKey Authenticator</legend>
-    <h2>Init</h2>
-    <form method="GET" action="@routes.YubiAuth.init()">
-        <input placeholder="username" type="text" name="username"/>
-        <input placeholder="yubikey" type="text" name="yubikey"/>
-        <input type="submit" value="init">
-    </form>
-    <h2>Login</h2>
-    @form(routes.YubiAuth.auth()) {
-    @inputText(
-    userForm("username"),
-    '_label -> "username",
-    'class -> "form-control",
-    'placeholder -> "username"
-    )
-    @inputText(
-    userForm("yubiKey"),
-    '_label -> "yubikey",
-    'class -> "form-control",
-    'placeholder -> "yubikey"
-    )
-    <input type="submit" value="Login">
+    @if(user.googleSecretKey != null){
+    <li>GA <span class="glyphicon glyphicon-ok"></span></li>
     }
-</fieldset>
+    <li><a href="@routes.Application.logout()">logout</a></li>
+</ol>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6">
+        <form method="POST" action="@routes.GoogleAuth.init()">
+            <input class="btn btn-primary" type="submit" value="init Google Authenticaor"/>
+
+        </form>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6">
+        <form method="POST" action="@routes.YubiAuth.init()">
+            <input class="btn btn-primary" type="submit" value="init YubiKey Authenticaor"/>
+            @inputText(
+            userForm("yubiKey"),
+            '_label -> "yubikey",
+            'placeholder -> "yubikey"
+            )
+        </form>
+    </div>
+</div>
+
 }

@@ -1,5 +1,17 @@
-@(message: String)
+@(message: String, user: User)
 @main("Welcome to Auth Demo") {
+<ol class="breadcrumb">
+    <li><a href="@routes.Application.index()">Main</a></li>
+    <li>Hello @user.username</li>
+    @if(user.yubiKeyIdentity != null){
+    <li>YK <span class="glyphicon glyphicon-ok"></span></li>
+    }
+    @if(user.googleSecretKey != null){
+    <li>GA <span class="glyphicon glyphicon-ok"></span></li>
+    }
+    <li><a href="@routes.Application.logout()">logout</a></li>
+</ol>
+
     Welcome to the System!
     <pre>
     @message

@@ -4,11 +4,15 @@
 
 # Home page
 GET     /                           controllers.Application.index()
+GET     /logout                     controllers.Application.logout()
+POST    /auth                       controllers.Application.auth()
 
-GET     /GA                         controllers.GoogleAuth.init()
+POST    /users                      controllers.Users.save()
+
+POST     /GA                        controllers.GoogleAuth.init()
 POST    /GA/auth                    controllers.GoogleAuth.auth()
 
-GET     /YK                         controllers.YubiAuth.init()
+POST     /YK                        controllers.YubiAuth.init()
 POST    /YK/auth                    controllers.YubiAuth.auth()
 
 # Map static resources from the /public folder to the /assets URL path
