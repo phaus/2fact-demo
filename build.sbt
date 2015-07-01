@@ -6,6 +6,10 @@ version in Docker := version.value
 
 dockerRepository := Some("phaus")
 
+dockerExposedPorts := Seq(9000, 9443)
+
+dockerExposedVolumes := Seq("/opt/docker/logs")
+
 name := """2fact-demo"""
 
 version := "1.0-SNAPSHOT"
