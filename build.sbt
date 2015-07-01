@@ -1,3 +1,11 @@
+maintainer in Docker := "Philipp Haußleiter <philipp@haussleiter.de>"
+
+packageName in Docker := packageName.value
+
+version in Docker := version.value
+
+dockerRepository := Some("phaus")
+
 name := """2fact-demo"""
 
 version := "1.0-SNAPSHOT"
