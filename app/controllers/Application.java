@@ -19,9 +19,13 @@ public class Application extends Controller {
 
     public static Result index() {
         String sessionId = session().get("sessionId");
+        if (sessionId == null) {
+            Logger.info("not logged in!");
+            return ok(login.render("Please Login!", USER_FORM));            
+        }
         User user = User.FINDER.where().eq("sessionId", sessionId).findUnique();
         Logger.info("sessionId: " + sessionId);
-        if (sessionId == null || user == null) {
+        if (user == null) {
             Logger.info("not logged in!");
             return ok(login.render("Please Login!", USER_FORM));
         } else {
