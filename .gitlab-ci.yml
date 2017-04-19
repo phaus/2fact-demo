@@ -9,8 +9,14 @@ before_script:
   - sbt sbt-version
 
 stages:
+  - build
   - test
   - deploy
+
+build:
+  stage: build
+  script:
+    - sbt compile
 
 test:
   stage: test

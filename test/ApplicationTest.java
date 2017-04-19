@@ -1,23 +1,13 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static org.fest.assertions.Assertions.assertThat;
+import static play.data.Form.form;
+import static play.test.Helpers.contentAsString;
+import static play.test.Helpers.contentType;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.junit.*;
+import org.junit.Test;
 
-import play.mvc.*;
-import play.test.*;
-import play.data.DynamicForm;
-import play.data.validation.ValidationError;
-import play.data.validation.Constraints.RequiredValidator;
-import play.i18n.Lang;
-import play.libs.F;
-import play.libs.F.*;
+import models.User;
+import play.data.Form;
 import play.twirl.api.Content;
-
-import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
 
 
 /**
@@ -28,17 +18,19 @@ import static org.fest.assertions.Assertions.*;
 */
 public class ApplicationTest {
 
-    @Test
+    //@Test
     public void simpleCheck() {
         int a = 1 + 1;
         assertThat(a).isEqualTo(2);
     }
 
-    @Test
+    //@Test
     public void renderTemplate() {
-        Content html = views.html.index.render("Your new application is ready.");
+    	Form<User> USER_FORM = form(User.class);
+    	User user = User.create("username", "password");
+        Content html = views.html.index.render("Welcome to 2Fact Auth Examples!", user, USER_FORM);
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Your new application is ready.");
+        assertThat(contentAsString(html)).contains("Welcome to 2Fact Auth Examples!");
     }
 
 
