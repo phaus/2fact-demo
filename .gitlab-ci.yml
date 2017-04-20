@@ -20,8 +20,12 @@ docker:
   stage: publish
   script:  
     - apt-get update -yq
-    - apt-get install docker -y
-    - docker info
+    - apt-get install docker.io -y
+    - group add docker
+    - groupadd docker
+    - gpasswd -a $USER docker
+    - service docker restart
+    - docker info    
     - sbt docker:publishLocal
 
 heroku:
