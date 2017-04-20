@@ -21,7 +21,6 @@ docker:
   script:  
     - apt-get update -yq
     - apt-get install docker -y
-    - usermod -aG docker $user
     - docker info
     - sbt docker:publishLocal
 
