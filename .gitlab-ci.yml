@@ -3,6 +3,7 @@ image: phaus/play2build:8
 stages:
   - build
   - test
+  - publish
   - deploy
 
 build:
@@ -16,14 +17,15 @@ test:
     - sbt test
 
 docker:
-  stage: deploy
+  stage: publish
   script:  
+    - apt-get update -yq
+    - apt-get install docker -y
+    - usermod -aG docker $user
+    - docker info
     - sbt docker:publishLocal
 
 deploy:
   stage: deploy
   script:
-    - apt-get update -yq
-    - apt-get install rubygems ruby-dev -y
-    - gem install dpl
     - dpl --provider=heroku --app=a2fact-demo --api-key=$HEROKU_API_KEY
