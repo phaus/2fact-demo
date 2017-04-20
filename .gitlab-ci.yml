@@ -21,12 +21,6 @@ dist:
   script:  
     - sbt dist
 
-docker:
-  stage: publish
-  script:
-    - docker info    
-    - sbt docker:publishLocal
-
 heroku:
   stage: deploy
   script:
