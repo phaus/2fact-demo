@@ -16,12 +16,16 @@ test:
   script:
     - sbt test
 
+dist:
+  stage: publish
+  script:  
+    - sbt dist
+
 docker:
   stage: publish
   script:  
     - apt-get update -yq
     - apt-get install docker.io -y
-    - group add docker
     - groupadd docker
     - gpasswd -a $USER docker
     - service docker restart
