@@ -6,7 +6,7 @@ stages:
   - publish
   - deploy
 
-build:
+sbt:
   stage: build
   script:
     - sbt compile
@@ -24,7 +24,7 @@ docker:
     - docker info
     - sbt docker:publishLocal
 
-deploy:
+heroku:
   stage: deploy
   script:
     - dpl --provider=heroku --app=a2fact-demo --api-key=$HEROKU_API_KEY
