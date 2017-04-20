@@ -26,7 +26,6 @@ docker:
   script:  
     - apt-get update -yq
     - apt-get install docker.io -y
-    - groupadd docker
     - gpasswd -a $USER docker
     - service docker restart
     - docker info    
