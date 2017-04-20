@@ -15,6 +15,11 @@ test:
   script:
     - sbt test
 
+docker:
+  stage: deploy
+  script:  
+    - sbt docker:publishLocal
+
 deploy:
   stage: deploy
   script:
