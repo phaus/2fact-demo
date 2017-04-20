@@ -23,11 +23,7 @@ dist:
 
 docker:
   stage: publish
-  script:  
-    - apt-get update -yq
-    - apt-get install docker.io -y
-    - gpasswd -a $USER docker
-    - service docker restart
+  script:
     - docker info    
     - sbt docker:publishLocal
 
