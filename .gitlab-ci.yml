@@ -1,10 +1,5 @@
 image: phaus/play2build:8
 
-job:
-  tags:
-    - docker
-    - rack
-
 stages:
   - build
   - test
@@ -13,20 +8,32 @@ stages:
 
 sbt:
   stage: build
+  tags:
+    - docker
+    - rack
   script:
     - sbt compile
 
 test:
   stage: test
+  tags:
+    - docker
+    - rack
   script:
     - sbt test
 
 dist:
   stage: publish
+  tags:
+    - docker
+    - rack
   script:  
     - sbt dist
 
 heroku:
   stage: deploy
+  tags:
+    - docker
+    - rack
   script:
     - dpl --provider=heroku --app=a2fact-demo --api-key=$HEROKU_API_KEY
