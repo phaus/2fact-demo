@@ -1,5 +1,10 @@
 image: phaus/play2build:8
 
+job:
+  tags:
+    - docker
+    - rack
+
 stages:
   - build
   - test
