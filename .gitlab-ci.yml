@@ -33,12 +33,12 @@ dist:
     paths:
     - target/universal/2fact-demo-*.zip
 
-docker:
-  stage: publish
-  tags:
-    - image-create 
-  script:  
-    - sbt docker:publishLocal    
+#docker:
+#  stage: publish
+#  tags:
+#    - docker 
+#  script:
+#    - sbt docker:publishLocal    
 
 heroku:
   stage: deploy
