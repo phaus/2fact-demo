@@ -36,7 +36,6 @@ dist:
 docker:
   stage: publish
   tags:
-    - docker
     - image-create 
   script:  
     - sbt docker:publishLocal    
