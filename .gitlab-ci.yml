@@ -30,6 +30,14 @@ dist:
   script:  
     - sbt dist
 
+dist:
+  stage: publish
+  tags:
+    - docker
+    - create-container 
+  script:  
+    - sbt docker:publishLocal    
+
 heroku:
   stage: deploy
   tags:
