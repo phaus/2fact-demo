@@ -29,8 +29,11 @@ dist:
     - rack
   script:  
     - sbt dist
+  artifacts:
+    paths:
+    - target/universal/2fact-demo-*.zip
 
-dist:
+docker:
   stage: publish
   tags:
     - docker
