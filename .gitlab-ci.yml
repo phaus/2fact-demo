@@ -14,6 +14,15 @@ sbt:
   script:
     - sbt compile
 
+registry:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.innoq.com:5001
+    - sbt docker:publishLocal
+
 test:
   stage: test
   tags:
