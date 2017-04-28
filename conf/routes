@@ -16,4 +16,4 @@ POST     /YK                        controllers.YubiAuth.init()
 POST    /YK/auth                    controllers.YubiAuth.auth()
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

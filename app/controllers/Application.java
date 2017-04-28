@@ -4,8 +4,11 @@ import models.User;
 
 import static play.data.Form.*;
 
+import javax.inject.Inject;
+
 import play.Logger;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.*;
 
 import views.html.*;
@@ -15,31 +18,37 @@ import views.html.*;
  */
 
 public class Application extends Controller {
-    final static Form<User> USER_FORM = form(User.class);
+	
+	private final Form<User> userForm;
+	
+	@Inject
+	public Application(FormFactory formFactory) {
+		this.userForm = formFactory.form(User.class);
+	}	
 
-    public static Result index() {
+    public Result index() {
         String sessionId = session().get("sessionId");
         if (sessionId == null) {
             Logger.info("not logged in!");
-            return ok(login.render("Please Login!", USER_FORM));            
+            return ok(login.render("Please Login!", userForm));            
         }
-        User user = User.FINDER.where().eq("sessionId", sessionId).findUnique();
+        User user = User.Find.where().eq("sessionId", sessionId).findUnique();
         Logger.info("sessionId: " + sessionId);
         if (user == null) {
             Logger.info("not logged in!");
-            return ok(login.render("Please Login!", USER_FORM));
+            return ok(login.render("Please Login!", userForm));
         } else {
             Logger.info("User logged in:\n" + user.toString());
         }
-        return ok(index.render("Welcome to 2Fact Auth Examples!", user, USER_FORM));
+        return ok(index.render("Welcome to 2Fact Auth Examples!", user, userForm));
     }
 
-    public static Result auth() {
-        Form<User> userForm = USER_FORM.bindFromRequest();
-        if (userForm.hasErrors()) {
-            return redirect(controllers.routes.Application.index());
+    public Result auth() {
+        Form<User> newUserForm = userForm.bindFromRequest();
+        if (newUserForm.hasErrors()) {
+            return redirect(routes.Application.index());
         }
-        User fUser = userForm.get();
+        User fUser = newUserForm.get();
         final User user = User.getOrCreate(fUser.username);
         if (user == null) {
             return notFound();
@@ -51,17 +60,17 @@ public class Application extends Controller {
         } else {
             Logger.info("password invalid!");
         }
-        return redirect(controllers.routes.Application.index());
+        return redirect(routes.Application.index());
     }
 
-    public static Result logout() {
+    public Result logout() {
         String sessionId = session().get("sessionId");
-        User user = User.FINDER.where().eq("sessionId", sessionId).findUnique();
+        User user = User.Find.where().eq("sessionId", sessionId).findUnique();
         if (sessionId != null && user != null) {
             user.clearSession();
             user.save();
         }
-        return redirect(controllers.routes.Application.index());
+        return redirect(routes.Application.index());
     }
 
 }

@@ -12,18 +12,21 @@ dockerExposedVolumes := Seq("/opt/docker/logs")
 
 name := """2fact-demo"""
 
-version := "1.1-SNAPSHOT"
+version := "2.5-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.7"
 
 resolvers += ("maven.javastream.de" at "http://maven.javastream.de/")
 
 libraryDependencies ++= Seq(
   javaJdbc,
-  javaEbean,
   cache,
   javaWs,
-  "com.warrenstrange" % "googleauth" % "0.2-SNAPSHOT"
+  "org.webjars" %% "webjars-play" % "2.4.0-1",
+  "org.webjars" % "jquery" % "3.2.0",
+  "org.webjars" % "bootstrap" % "3.3.7-1",
+  "com.warrenstrange" % "googleauth" % "1.1.1",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )

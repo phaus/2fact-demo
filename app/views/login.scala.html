@@ -11,15 +11,35 @@
 <div class="container">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#legacy" role="tab" data-toggle="tab">Legacy</a></li>
-        <li><a href="#google" role="tab" data-toggle="tab">Google Authenticator</a></li>
-        <li><a href="#yubi" role="tab" data-toggle="tab">YubiKey</a></li>
-        <li><a href="#register" role="tab" data-toggle="tab">Register</a></li>
+        <li class="active"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
+        <li><a href="#legacy" aria-controls="legacy" role="tab" data-toggle="tab">Legacy</a></li>
+        <li><a href="#google"aria-controls="google" role="tab" data-toggle="tab">Google Authenticator</a></li>
+        <li><a href="#yubi" aria-controls="yubi" role="tab" data-toggle="tab">YubiKey</a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div class="tab-pane active" id="legacy">
+ 		<div role="tabpanel" class="tab-pane active" id="register">
+            <fieldset>
+                <legend>Register</legend>
+                @form(routes.Users.save()) {
+                @inputText(
+                userForm("username"),
+                '_label -> "username",
+                'class -> "form-control",
+                'placeholder -> "username"
+                )
+                @inputPassword(
+                userForm("password"),
+                '_label -> "password",
+                'class -> "form-control",
+                'placeholder -> "password"
+                )
+                <input class="btn btn-primary" type="submit" value="Create" />
+                }
+            </fieldset>
+        </div>    
+        <div role="tabpanel" class="tab-pane" id="legacy">
             <fieldset>
                 <legend>Legacy Login</legend>
                 @form(routes.Application.auth()) {
@@ -39,7 +59,7 @@
                 }
             </fieldset>
         </div>
-        <div class="tab-pane" id="google">
+        <div role="tabpanel" class="tab-pane" id="google">
             <fieldset>
                 <legend>Google Authenticator</legend>
                 @form(routes.GoogleAuth.auth()) {
@@ -66,7 +86,7 @@
             </fieldset>
 
         </div>
-        <div class="tab-pane" id="yubi">
+        <div role="tabpanel" class="tab-pane" id="yubi">
             <fieldset>
                 <legend>YubiKey Authenticator</legend>
                 @form(routes.YubiAuth.auth()) {
@@ -92,26 +112,6 @@
                 }
             </fieldset>
         </div>
-        <div class="tab-pane" id="register">
-            <fieldset>
-                <legend>Register</legend>
-                @form(routes.Users.save()) {
-                @inputText(
-                userForm("username"),
-                '_label -> "username",
-                'class -> "form-control",
-                'placeholder -> "username"
-                )
-                @inputPassword(
-                userForm("password"),
-                '_label -> "password",
-                'class -> "form-control",
-                'placeholder -> "password"
-                )
-                <input class="btn btn-primary" type="submit" value="Create" />
-                }
-            </fieldset>
-        </div>
     </div>
-    }
 </div>
+ }
