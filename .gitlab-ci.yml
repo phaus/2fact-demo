@@ -47,4 +47,4 @@ heroku:
     - docker
     - rack
   script:
-    - dpl --provider=heroku --app=a2fact-demo --api-key=$HEROKU_API_KEY -Dsbt.log.noformat=true -Dsbt.ivy.home=/cache/.ivy2/
+    - dpl --provider=heroku --app=a2fact-demo --api-key=$HEROKU_API_KEY
