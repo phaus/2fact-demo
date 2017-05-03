@@ -3,9 +3,7 @@
 @(message: String, user: User, userForm: Form[User])
 
 @main("Welcome to Auth Demo") {
-<ol class="breadcrumb">
-    <li><a href="@routes.Application.index()">Main</a></li>
-    <li>Hello @user.username</li>
+    <li><a href="#">Hello @user.username</a></li>
     @if(user.yubiKeyIdentity != null){
     <li>YK <span class="glyphicon glyphicon-ok"></span></li>
     }
@@ -13,23 +11,25 @@
     <li>GA <span class="glyphicon glyphicon-ok"></span></li>
     }
     <li><a href="@routes.Application.logout()">logout</a></li>
-</ol>
+
+} {
 
 <div class="row">
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="jumbotron">
         <form method="POST" action="@routes.GoogleAuth.init()">
             <input class="btn btn-primary" type="submit" value="init Google Authenticaor"/>
-
         </form>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="jumbotron">
         <form method="POST" action="@routes.YubiAuth.init()">
-            <input class="btn btn-primary" type="submit" value="init YubiKey Authenticaor"/>
+            <p>
             @inputText(
             userForm("yubiKey"),
             '_label -> "yubikey",
             'placeholder -> "yubikey"
             )
+            </p>
+            <input class="btn btn-primary" type="submit" value="init YubiKey Authenticaor"/>
         </form>
     </div>
 </div>

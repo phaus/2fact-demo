@@ -43,6 +43,10 @@ public class Application extends Controller {
         return ok(index.render("Welcome to 2Fact Auth Examples!", user, userForm));
     }
 
+    public Result register() {
+        return ok(register.render("Welcome to 2Fact Auth Examples!", userForm));    	
+    }
+    
     public Result auth() {
         Form<User> newUserForm = userForm.bindFromRequest();
         if (newUserForm.hasErrors()) {

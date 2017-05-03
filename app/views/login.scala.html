@@ -3,43 +3,20 @@
 @(message: String, userForm: Form[User])
 
 @main("Welcome to Auth Demo") {
-
-<ol class="breadcrumb">
-    <li><a href="@routes.Application.index()">Main</a></li>
-    <li class="active">Login</li>
-</ol>
+    <li><a href="@routes.Application.register()">Register</a></li>
+    <li class="active"><a href="#">Login</a></li>
+} {
 <div class="container">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
-        <li><a href="#legacy" aria-controls="legacy" role="tab" data-toggle="tab">Legacy</a></li>
+        <li class="active"><a href="#legacy" aria-controls="legacy" role="tab" data-toggle="tab">Legacy</a></li>
         <li><a href="#google" aria-controls="google" role="tab" data-toggle="tab">Google Authenticator</a></li>
         <li><a href="#yubi" aria-controls="yubi" role="tab" data-toggle="tab">YubiKey</a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
- 		<div role="tabpanel" class="tab-pane active" id="register">
-            <fieldset>
-                <legend>Register</legend>
-                @form(routes.Users.save()) {
-                @inputText(
-                userForm("username"),
-                '_label -> "username",
-                'class -> "form-control",
-                'placeholder -> "username"
-                )
-                @inputPassword(
-                userForm("password"),
-                '_label -> "password",
-                'class -> "form-control",
-                'placeholder -> "password"
-                )
-                <input class="btn btn-primary" type="submit" value="Create" />
-                }
-            </fieldset>
-        </div>    
-        <div role="tabpanel" class="tab-pane" id="legacy">
+        <div role="tabpanel" class="tab-pane active" id="legacy">
             <fieldset>
                 <legend>Legacy Login</legend>
                 @form(routes.Application.auth()) {

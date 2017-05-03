@@ -24,9 +24,9 @@ libraryDependencies ++= Seq(
   javaJdbc,
   cache,
   javaWs,
-  "org.webjars" %% "webjars-play" % "2.4.0-1",
+  "org.webjars" %% "webjars-play" % "2.5.0",
+  "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.webjars" % "jquery" % "3.2.0",
-  "org.webjars" % "bootstrap" % "3.3.7-1",
   "com.warrenstrange" % "googleauth" % "1.1.1",
   "org.mindrot" % "jbcrypt" % "0.3m"
 )

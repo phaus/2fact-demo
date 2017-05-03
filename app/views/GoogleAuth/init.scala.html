@@ -1,7 +1,6 @@
 @(qrCode: String, user: User)
 
 @main("Welcome to Google Authenticator") {
-<ol class="breadcrumb">
     <li><a href="@routes.Application.index()">Main</a></li>
     <li>Hello @user.username</li>
     @if(user.yubiKeyIdentity != null){
@@ -11,7 +10,7 @@
     <li>GA <span class="glyphicon glyphicon-ok"></span></li>
     }
     <li><a href="@routes.Application.logout()">logout</a></li>
-</ol>
+} {
 <h1>Google Authenticator</h1>
 <img src="@qrCode"/>
 <p>

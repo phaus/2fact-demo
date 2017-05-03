@@ -1,0 +1,30 @@
+@import helper._
+
+@(message: String, userForm: Form[User])
+
+@main("Welcome to Auth Demo") {
+    <li class="active"><a href="#">Register</a></li>
+    <li><a href="@routes.Application.index()">Login</a></li>    
+} {
+<div class="row">
+ 		<fieldset>
+	        <legend>Register</legend>
+	        @form(routes.Users.save()) {
+	        @inputText(
+	        userForm("username"),
+	        '_label -> "username",
+	        'class -> "form-control",
+	        'placeholder -> "username"
+	        )
+	        @inputPassword(
+	        userForm("password"),
+	        '_label -> "password",
+	        'class -> "form-control",
+	        'placeholder -> "password"
+	        )
+	        <input class="btn btn-primary" type="submit" value="Create" />
+	        }
+    </fieldset>
+</div>
+
+}
