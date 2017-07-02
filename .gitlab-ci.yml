@@ -47,4 +47,5 @@ heroku:
     - docker
     - rack
   script:
-    - dpl --provider=heroku --app=a2fact-demo --api-key=$HEROKU_API_KEY
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/a2fact-demo.git
+    - git push -f heroku master
