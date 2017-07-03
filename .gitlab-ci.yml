@@ -1,5 +1,8 @@
 image: phaus/play2build:8
 
+services:
+  - docker:dind
+
 stages:
   - build
   - test
