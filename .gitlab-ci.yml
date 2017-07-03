@@ -1,10 +1,20 @@
 image: phaus/play2build:8
+services:
+- docker:dind
 
 stages:
   - build
   - test
   - publish
   - deploy
+
+docker:
+  services:
+  - docker:dind
+
+variables:
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
@@ -42,7 +52,9 @@ docker:
     - docker
     - rack
   script:
-    - sbt docker:publishLocal -Dsbt.log.noformat=true -Dsbt.ivy.home=/cache/.ivy2/
+    - sbt docker:publishLocal -Dsbt.log.noformat=true -Dsbt.ivy.home=/cache/.ivy2/   
+    - docker build -t $CONTAINER_TEST_IMAGE target/docker/stage
+    - docker push $CONTAINER_TEST_IMAGE
 
 heroku:
   stage: deploy
