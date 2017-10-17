@@ -12,7 +12,7 @@ dockerExposedVolumes := Seq("/opt/docker/logs")
 
 name := """2fact-demo"""
 
-version := "2.5-SNAPSHOT"
+version := "2.6-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 
