@@ -1,16 +1,19 @@
-# This is a demo application for 2 factor authentication.
+# 2fact Demo
 
-
-A Demo App for 2 Factor Authentication — Google Auth & Yubikey
+This is a demo application for 2 factor authentication
+The Demo App currently covers normal registration/login and 2 Factor Authentication with Google Auth & Yubikey
 
 ## Building
 
-This file will be packaged with your application, when using `activator dist`.
+This file will be packaged with your application, when using:
+
+```bash
+sbt update
+sbt dist
+```
+
+After that, you can use `docker build -t foo/2fact-demo .` to create an Docker Image.
 
 ## Running
 
-Exported Port: 9000
-
-
-
-
+As default, the Application binds onto Port 9000. This can be change with setting the environment variable `PORT` (heroku pattern).

@@ -12,13 +12,15 @@ dockerExposedVolumes := Seq("/opt/docker/logs")
 
 name := """2fact-demo"""
 
-version := "2.6-SNAPSHOT"
+version := "2.5.10"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 
 scalaVersion := "2.11.7"
 
-resolvers += ("maven.javastream.de" at "http://maven.javastream.de/")
+resolvers ++= Seq(
+    "maven.javastream.de" at "http://maven.javastream.de"
+)
 
 libraryDependencies ++= Seq(
   javaJdbc,

@@ -1,4 +1,4 @@
-image: phaus/play2build:8
+image: phaus/play2build:alpine
 
 stages:
   - build
@@ -6,46 +6,73 @@ stages:
   - publish
   - deploy
 
-sbt:
+variables:
+  DOCKER_IMAGE_TAGGED: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  SBT_OPTS: "-Dsbt.global.base=sbt-cache/.sbtboot -Dsbt.boot.directory=sbt-cache/.boot -Dsbt.ivy.home=sbt-cache/.ivy"
+
+cache:
+  untracked: true
+  paths:
+    - "sbt-cache/.ivy/cache"
+    - "sbt-cache/.boot"
+    - "sbt-cache/.sbtboot"
+    - "sbt-cache/target"
+
+build:
   stage: build
   tags:
     - docker
-    - rack
   script:
-    - sbt compile -Dsbt.log.noformat=true -Dsbt.ivy.home=/cache/.ivy2/
+    - sbt compile
 
 test:
   stage: test
   tags:
     - docker
-    - rack
   script:
-    - sbt test -Dsbt.log.noformat=true -Dsbt.ivy.home=/cache/.ivy2/
+    - sbt test
+  artifacts:
+    paths:
+    - target/test-reports/*.xml
+  dependencies:
+    - build
+  when: on_success
 
 dist:
   stage: publish
   tags:
     - docker
-    - rack
   script:  
-    - sbt dist -Dsbt.log.noformat=true -Dsbt.ivy.home=/cache/.ivy2/
+    - sbt dist
   artifacts:
     paths:
-    - target/universal/2fact-demo-*.zip
+    - target/universal/*.zip
+  dependencies:
+    - test
+  when: on_success
 
 docker:
   stage: publish
   tags:
     - docker
-    - rack
   script:
-    - sbt docker:publishLocal -Dsbt.log.noformat=true -Dsbt.ivy.home=/cache/.ivy2/
+    - sbt dist
+    - docker build -t $DOCKER_IMAGE_TAGGED .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push $DOCKER_IMAGE_TAGGED
+  dependencies:
+    - test
+  when: on_success
 
 heroku:
   stage: deploy
   tags:
     - docker
-    - rack
   script:
+    - git remote rm heroku
     - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
     - git push -f heroku master
+  environment:
+    name: heroku
+    url: https://$HEROKU_APP_NAME.herokuapp.com
+    
