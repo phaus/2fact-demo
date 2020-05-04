@@ -7,7 +7,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.Column;
 import javax.persistence.Transient;
+import javax.persistence.Table;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -15,17 +17,18 @@ import com.avaje.ebean.Model;
 
 import play.Logger;
 import play.libs.Json;
-import tyrex.services.UUID;
+import java.util.UUID;
 
 /**
  * Created by philipp on 31.08.14.
  */
 
 @Entity
+@Table(name = "users")
 public class User extends Model {
 
-	@Id
-	public Long id;
+ 	@Id
+	public String id;
 	
 	public String username;
 
@@ -38,6 +41,7 @@ public class User extends Model {
 	public Integer googleValidationCode;
 
 	@Lob
+	@Column(columnDefinition = "text")
 	public String googleScratchCodes;
 
 	public String yubiKeyNonce;
@@ -48,6 +52,10 @@ public class User extends Model {
 
 	public static final Find<Long,User> Find = new Find<Long,User>(){};
 	
+	public User() {
+		this.id = UUID.randomUUID().toString();
+	}
+
 	public List<Integer> loadScratchCodes() {
 		List<Integer> scratchCodes = new ArrayList<Integer>();
 		try {
@@ -64,15 +72,15 @@ public class User extends Model {
 	}
 
 	public void updateSession() {
-		this.sessionId = UUID.create();
+		this.sessionId = UUID.randomUUID().toString();
 	}
 
 	public void clearSession() {
 		this.sessionId = null;
 	}
 
-	public void hashPassword() {
-		password = getHash(password.trim());
+	public void hashPassword(String password) {
+		this.password = getHash(password.trim());
 	}
 
 	public void saveScratchCodes(List<Integer> scratchCodes) {
@@ -103,8 +111,7 @@ public class User extends Model {
 	public static User create(String username, String password) {
 		User user = new User();
 		user.username = username.trim();
-		user.password = password.trim();
-		user.hashPassword();
+		user.hashPassword(password);
 		user.save();
 		Logger.info("created user: " + user.toString());
 		return user;

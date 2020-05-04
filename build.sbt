@@ -23,9 +23,11 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
+  evolutions,
   javaJdbc,
   cache,
   javaWs,
+  "org.postgresql" % "postgresql" % "42.2.12",
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.webjars" % "jquery" % "3.2.0",
